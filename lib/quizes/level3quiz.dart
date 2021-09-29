@@ -46,6 +46,7 @@ class _Level3QuizState extends State<Level3Quiz> {
     return Scaffold(
       body: SafeArea(
         child: ListView.builder(
+          scrollDirection: Axis.horizontal,
         itemCount: mydata.length,
         itemBuilder: (context, index) {
           if(!answering && answer!="good"&&answer!="bad"){

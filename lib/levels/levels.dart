@@ -127,10 +127,10 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("Can you pronounce this word?",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
-                            fontSize: 25,
+                            fontSize: 20,
                           ),),
 
                           SizedBox(height: 10,),
@@ -189,11 +189,14 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white60,
-                            fontSize: 25,
-                          ),),
+                          Container(alignment: Alignment.center,padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
+                            child: Text("Let's put these words in meaningful groups",style: GoogleFonts.aBeeZee(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white60,
+                              fontSize: 18,
+                            ),),
+                          ),
 
                           SizedBox(height: 10,),
                         ],
@@ -251,10 +254,10 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("What does the word mean?",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
-                            fontSize: 25,
+                            fontSize: 22,
                           ),),
 
                           SizedBox(height: 10,),
@@ -313,10 +316,10 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("Let's divide the words together.",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
-                            fontSize: 25,
+                            fontSize: 21,
                           ),),
 
                           SizedBox(height: 10,),
@@ -375,7 +378,7 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("Where is the correct picture?",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
                             fontSize: 25,
@@ -437,7 +440,7 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("Speak with me in English",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
                             fontSize: 25,
@@ -499,7 +502,7 @@ class _LevelsPageState extends State<LevelsPage> {
                             fontSize: 22,
                           ),),
                           SizedBox(height: 25,),
-                          Text("Letters & Sounds",style: GoogleFonts.aBeeZee(
+                          Text("Which one is missing?",style: GoogleFonts.aBeeZee(
                             fontWeight: FontWeight.normal,
                             color: Colors.white60,
                             fontSize: 25,
