@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,12 @@ dispose() {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]);
+  ]);FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+    int res=value['points']+score;
+    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+      "points":res
+    });
+  });
   super.dispose();
 }
   @override
@@ -114,8 +120,9 @@ dispose() {
                                   if (choice1 == answer) {
                                     ans = "good";
                                     score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 5").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level5_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {
@@ -157,8 +164,9 @@ dispose() {
                                 setState(() {
                                   if (choice2 == answer) {
                                     ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 5").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level5_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {
@@ -200,8 +208,9 @@ dispose() {
                                 setState(() {
                                   if (choice3 == answer) {
                                     ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 5").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level5_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {
@@ -340,7 +349,7 @@ dispose() {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: Text(res.toString()+"/2"),
+                  child: Text(score.toString()),
                 );
               }
               else {

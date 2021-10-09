@@ -34,11 +34,11 @@ class _LevelsPageState extends State<LevelsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black45,size: 70),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0,
+      //   iconTheme: IconThemeData(color: Colors.black45,size: 70),
+      // ),
       body: ListView(
         children: [
           //level 1
@@ -53,7 +53,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level1()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level1Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -115,7 +115,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level2()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level2Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -177,7 +177,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level3()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level3Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -242,7 +242,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level4()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level4Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -304,7 +304,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level5()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level5Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -366,7 +366,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level6()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level6Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -428,7 +428,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level7()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Level7Quiz()));
                     },
                     child: Container(
                       child: Column(
@@ -490,7 +490,7 @@ class _LevelsPageState extends State<LevelsPage> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level8()));
+                      Navigator.push(context, MaterialPageRoute(builder: (cotext)=>Level8Quiz()));
                     },
                     child: Container(
                       child: Column(

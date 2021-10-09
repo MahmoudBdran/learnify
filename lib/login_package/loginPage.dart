@@ -113,8 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     hidePassword = !hidePassword;
                   });
                 },
-                color: Theme.of(context)
-                    .accentColor
+                color: Colors.teal
                     .withOpacity(0.4),
                 icon: Icon(hidePassword
                     ? Icons.visibility_off

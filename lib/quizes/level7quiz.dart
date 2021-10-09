@@ -54,7 +54,12 @@ class _Level7QuizState extends State<Level7Quiz> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]);FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      int res=value['points']+score;
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "points":res
+      });
+    });
     super.dispose();
   }
   late stt.SpeechToText _speech;
@@ -238,8 +243,8 @@ class _Level7QuizState extends State<Level7Quiz> {
                               setState(() {
                                 if(_text==the_word){
                                   score++;
-                                  FirebaseFirestore.instance.collection("quiz").doc("level 2").update({
-                                    "score":score
+                                  FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                    "level7_score":score
                                   });
                                 }
                                 _text="";

@@ -7,6 +7,8 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:learnify/levels/levels.dart';
 import 'package:learnify/login_package/loginPage.dart';
+import 'package:learnify/people_screen.dart';
+import 'package:learnify/profile_screen.dart';
 import 'package:learnify/selectedtype_screen.dart';
 import 'package:learnify/units/UnitsPage.dart';
 
@@ -23,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     print("user id "+FirebaseAuth.instance.currentUser!.uid);
-  }
+    }
   final FlutterTts tts = FlutterTts();
 
 
@@ -44,12 +46,69 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          IconButton(onPressed: (){FirebaseAuth.instance.signOut();Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));}, icon: Icon(Icons.logout,color: Colors.black,))
+          // IconButton(onPressed: (){FirebaseAuth.instance.signOut();
+          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginPage()));},
+          //     icon: Icon(Icons.logout,color: Colors.black,))
         ],
         iconTheme: IconThemeData(color: Colors.black45,size: 70),
       ),
       drawer: Drawer(
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get(),
+          builder: (context, snapshot) {
+           if(snapshot.hasData){
+             DocumentSnapshot<Object?>? doc = snapshot.data;
 
+             return ListView(
+               children: [
+                 UserAccountsDrawerHeader(
+                   decoration: BoxDecoration(
+                       gradient:LinearGradient(
+                         begin: Alignment.topRight,
+                         end: Alignment.bottomLeft,
+                         colors: [
+                           Color(0xff7b32ea),
+                           Color(0xff760097),
+                         ],
+                       )
+                   ),
+                   accountName: Text(doc!['username']),
+                   accountEmail: Text(doc!['email']),
+                   currentAccountPicture:  Container(
+                     width: 140,
+                     height: 140,
+                     decoration: BoxDecoration(
+                         shape: BoxShape.circle,
+                         image: DecorationImage(
+                             image: NetworkImage(doc!['avatar']))),
+                   ),
+                 ),
+                 ListTile(
+                   onTap:(){Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid,),));},
+                   leading: Icon(Icons.person),
+                   title: Text("My Profile"),
+                   trailing: Icon(Icons.arrow_forward_ios),
+                 ),
+                 ListTile(
+                   onTap:(){Navigator.push(context, MaterialPageRoute(builder: (context) => PeopleScreen(),));},
+                   leading: Icon(Icons.search),
+                   title: Text("Discover People"),
+                   trailing: Icon(Icons.arrow_forward_ios),
+                 ),
+                 Divider(),
+                 ListTile(
+                   onTap:(){FirebaseAuth.instance.signOut();},
+                   leading: Icon(Icons.logout),
+                   title: Text("Sign Out"),
+                   trailing: Icon(Icons.arrow_forward_ios),
+                 ),
+               ],
+             );
+           }else{
+             return Center(child: CircularProgressIndicator(),);
+           }
+          }
+        ),
       ),
       body:  StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("type").snapshots(),
@@ -69,125 +128,126 @@ class _HomePageState extends State<HomePage> {
               future: FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get(),
               builder: (context, snapshot) {
 
-                DocumentSnapshot<Object?>? doc = snapshot.data;
-                String username=doc!['username'];
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left:8.0),
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Welcome.",style: GoogleFonts.aBeeZee(
-                                color: Colors.grey[400],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24
+               if(snapshot.hasData){
+                 DocumentSnapshot<Object?>? doc = snapshot.data;
+                 String username=doc!['username'];
+                 return SingleChildScrollView(
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Padding(
+                         padding: const EdgeInsets.only(left:8.0),
+                         child: Container(
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               Text("Welcome.",style: GoogleFonts.aBeeZee(
+                                   color: Colors.grey[400],
+                                   fontWeight: FontWeight.bold,
+                                   fontSize: 24
 
-                              ),),
-                              Text(username,style: GoogleFonts.aBeeZee(
-                                color: Colors.black,
+                               ),),
+                               Text(username,style: GoogleFonts.aBeeZee(
+                                 color: Colors.black,
 
-                              ),),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 10.0),
-                              InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LevelsPage()));
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF931D1D),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    image:  DecorationImage(
-                                      fit: BoxFit.cover,
-                                      colorFilter:  ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                                      image:  AssetImage(
-                                          "images/book.jpeg"),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 6.0,
-                                        offset: Offset(2, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  height: 100,
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Text("Go To Your Vocabulary",style: GoogleFonts.aBeeZee(
-                                      fontSize: 30,
-                                      color: Colors.white
-                                  ),),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                      ),
-                      SizedBox(height: 10,),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                        child: Container(
-                            height: MediaQuery.of(context).size.height,
-                            child:GridView.builder(
-                              physics: ScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                              itemBuilder: (_, index){
-                                return InkWell(
-                                  onTap: (){
-                                    setState(() {
-                                      tts.speak(typesList[index]);
-                                    });
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectedTypeScreen(title: typesList[index],)));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      decoration:  BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          color: Colors.grey[200]
-                                        // image:  DecorationImage(
-                                        //   image:  NetworkImage(bgList[index]),
-                                        //   fit: BoxFit.cover,
-                                        // ),
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Image.network(bgList[index],fit: BoxFit.fitWidth,height: 100),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top:8.0),
-                                            child: Text(typesList[index],style: GoogleFonts.aBeeZee(
-                                                color: Colors.black87,
-                                                fontSize: 20
-                                            ),),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: 7,
-                            )
-                          /* Container(
+                               ),),
+                             ],
+                           ),
+                         ),
+                       ),
+                       Container(
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: <Widget>[
+                               SizedBox(height: 10.0),
+                               InkWell(
+                                 onTap: (){
+                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>LevelsPage()));
+                                 },
+                                 child: Container(
+                                   alignment: Alignment.center,
+                                   decoration: BoxDecoration(
+                                     color: Color(0xFF931D1D),
+                                     borderRadius: BorderRadius.circular(15.0),
+                                     image:  DecorationImage(
+                                       fit: BoxFit.cover,
+                                       colorFilter:  ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                                       image:  AssetImage(
+                                           "images/book.jpeg"),
+                                     ),
+                                     boxShadow: [
+                                       BoxShadow(
+                                         color: Colors.black12,
+                                         blurRadius: 6.0,
+                                         offset: Offset(2, 2),
+                                       ),
+                                     ],
+                                   ),
+                                   height: 100,
+                                   width: MediaQuery.of(context).size.width,
+                                   child: Text("Go To Your Vocabulary",style: GoogleFonts.aBeeZee(
+                                       fontSize: 30,
+                                       color: Colors.white
+                                   ),),
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ),
+                       ),
+                       Padding(
+                         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                       ),
+                       SizedBox(height: 10,),
+                       Padding(
+                         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                         child: Container(
+                             height: MediaQuery.of(context).size.height,
+                             child:GridView.builder(
+                               physics: ScrollPhysics(),
+                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                               itemBuilder: (_, index){
+                                 return InkWell(
+                                   onTap: (){
+                                     setState(() {
+                                       tts.speak(typesList[index]);
+                                     });
+                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectedTypeScreen(title: typesList[index],)));
+                                   },
+                                   child: Padding(
+                                     padding: const EdgeInsets.all(8.0),
+                                     child: Container(
+                                       alignment: Alignment.center,
+                                       decoration:  BoxDecoration(
+                                           borderRadius: BorderRadius.circular(20),
+                                           color: Colors.grey[200]
+                                         // image:  DecorationImage(
+                                         //   image:  NetworkImage(bgList[index]),
+                                         //   fit: BoxFit.cover,
+                                         // ),
+                                       ),
+                                       child: Column(
+                                         mainAxisAlignment: MainAxisAlignment.center,
+                                         children: [
+                                           Image.network(bgList[index],fit: BoxFit.fitWidth,height: 100),
+                                           Padding(
+                                             padding: const EdgeInsets.only(top:8.0),
+                                             child: Text(typesList[index],style: GoogleFonts.aBeeZee(
+                                                 color: Colors.black87,
+                                                 fontSize: 20
+                                             ),),
+                                           ),
+                                         ],
+                                       ),
+                                     ),
+                                   ),
+                                 );
+                               },
+                               itemCount: 7,
+                             )
+                           /* Container(
                               alignment: Alignment.center,
                               decoration:  BoxDecoration(
                                 // image:  DecorationImage(
@@ -202,123 +262,126 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                             ),*/
-                        ),
-                      ),
-                      // Column(
-                      //   children: [
-                      //     Container(
-                      //       child: Padding(
-                      //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           children: <Widget>[
-                      //             SizedBox(height: 10.0),
-                      //             InkWell(
-                      //               onTap: (){
-                      //                 Navigator.push(context, MaterialPageRoute(builder: (context)=>UnitsPage()));
-                      //               },
-                      //               child: Container(
-                      //                 alignment: Alignment.center,
-                      //                 decoration: BoxDecoration(
-                      //                   color: Color(0xFF931D1D),
-                      //                   borderRadius: BorderRadius.circular(15.0),
-                      //                   image:  DecorationImage(
-                      //                     fit: BoxFit.cover,
-                      //                     colorFilter:  ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
-                      //                     image:  AssetImage(
-                      //                         "images/book.jpeg"),
-                      //                   ),
-                      //                   boxShadow: [
-                      //                     BoxShadow(
-                      //                       color: Colors.black12,
-                      //                       blurRadius: 6.0,
-                      //                       offset: Offset(2, 2),
-                      //                     ),
-                      //                   ],
-                      //                 ),
-                      //                 height: 100,
-                      //                 width: MediaQuery.of(context).size.width,
-                      //                 child: Text("Go To Your Vocabulary",style: GoogleFonts.aBeeZee(
-                      //                     fontSize: 30,
-                      //                     color: Colors.white
-                      //                 ),),
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                      //     ),
-                      //     SizedBox(height: 10,),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                      //       child: Container(
-                      //           height: MediaQuery.of(context).size.height,
-                      //           child:GridView.builder(
-                      //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                      //             itemBuilder: (_, index){
-                      //               return InkWell(
-                      //                 onTap: (){
-                      //                   setState(() {
-                      //                     tts.speak(typesList[index]);
-                      //                   });
-                      //                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectedTypeScreen(title: typesList[index],)));
-                      //                 },
-                      //                 child: Padding(
-                      //                   padding: const EdgeInsets.all(8.0),
-                      //                   child: Container(
-                      //                     alignment: Alignment.center,
-                      //                     decoration:  BoxDecoration(
-                      //                         borderRadius: BorderRadius.circular(20),
-                      //                         color: Colors.grey[200]
-                      //                       // image:  DecorationImage(
-                      //                       //   image:  NetworkImage(bgList[index]),
-                      //                       //   fit: BoxFit.cover,
-                      //                       // ),
-                      //                     ),
-                      //                     child: Column(
-                      //                       mainAxisAlignment: MainAxisAlignment.center,
-                      //                       children: [
-                      //                         Image.network(bgList[index],fit: BoxFit.fitWidth,height: 100),
-                      //                         Padding(
-                      //                           padding: const EdgeInsets.only(top:8.0),
-                      //                           child: Text(typesList[index],style: GoogleFonts.aBeeZee(
-                      //                               color: Colors.black87,
-                      //                               fontSize: 20
-                      //                           ),),
-                      //                         ),
-                      //                       ],
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               );
-                      //             },
-                      //             itemCount: 7,
-                      //           )
-                      //         /* Container(
-                      //         alignment: Alignment.center,
-                      //         decoration:  BoxDecoration(
-                      //           // image:  DecorationImage(
-                      //           //   image:  NetworkImage(bgList[index]),
-                      //           //   fit: BoxFit.cover,
-                      //           // ),
-                      //         ),
-                      //         child: Column(
-                      //           children: [
-                      //             Image.network(bgList[index],fit: BoxFit.cover,),
-                      //             Text(typesList[index]),
-                      //           ],
-                      //         ),
-                      //       ),*/
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                );
+                         ),
+                       ),
+                       // Column(
+                       //   children: [
+                       //     Container(
+                       //       child: Padding(
+                       //         padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                       //         child: Column(
+                       //           crossAxisAlignment: CrossAxisAlignment.start,
+                       //           children: <Widget>[
+                       //             SizedBox(height: 10.0),
+                       //             InkWell(
+                       //               onTap: (){
+                       //                 Navigator.push(context, MaterialPageRoute(builder: (context)=>UnitsPage()));
+                       //               },
+                       //               child: Container(
+                       //                 alignment: Alignment.center,
+                       //                 decoration: BoxDecoration(
+                       //                   color: Color(0xFF931D1D),
+                       //                   borderRadius: BorderRadius.circular(15.0),
+                       //                   image:  DecorationImage(
+                       //                     fit: BoxFit.cover,
+                       //                     colorFilter:  ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                       //                     image:  AssetImage(
+                       //                         "images/book.jpeg"),
+                       //                   ),
+                       //                   boxShadow: [
+                       //                     BoxShadow(
+                       //                       color: Colors.black12,
+                       //                       blurRadius: 6.0,
+                       //                       offset: Offset(2, 2),
+                       //                     ),
+                       //                   ],
+                       //                 ),
+                       //                 height: 100,
+                       //                 width: MediaQuery.of(context).size.width,
+                       //                 child: Text("Go To Your Vocabulary",style: GoogleFonts.aBeeZee(
+                       //                     fontSize: 30,
+                       //                     color: Colors.white
+                       //                 ),),
+                       //               ),
+                       //             ),
+                       //           ],
+                       //         ),
+                       //       ),
+                       //     ),
+                       //     Padding(
+                       //       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                       //     ),
+                       //     SizedBox(height: 10,),
+                       //     Padding(
+                       //       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                       //       child: Container(
+                       //           height: MediaQuery.of(context).size.height,
+                       //           child:GridView.builder(
+                       //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                       //             itemBuilder: (_, index){
+                       //               return InkWell(
+                       //                 onTap: (){
+                       //                   setState(() {
+                       //                     tts.speak(typesList[index]);
+                       //                   });
+                       //                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectedTypeScreen(title: typesList[index],)));
+                       //                 },
+                       //                 child: Padding(
+                       //                   padding: const EdgeInsets.all(8.0),
+                       //                   child: Container(
+                       //                     alignment: Alignment.center,
+                       //                     decoration:  BoxDecoration(
+                       //                         borderRadius: BorderRadius.circular(20),
+                       //                         color: Colors.grey[200]
+                       //                       // image:  DecorationImage(
+                       //                       //   image:  NetworkImage(bgList[index]),
+                       //                       //   fit: BoxFit.cover,
+                       //                       // ),
+                       //                     ),
+                       //                     child: Column(
+                       //                       mainAxisAlignment: MainAxisAlignment.center,
+                       //                       children: [
+                       //                         Image.network(bgList[index],fit: BoxFit.fitWidth,height: 100),
+                       //                         Padding(
+                       //                           padding: const EdgeInsets.only(top:8.0),
+                       //                           child: Text(typesList[index],style: GoogleFonts.aBeeZee(
+                       //                               color: Colors.black87,
+                       //                               fontSize: 20
+                       //                           ),),
+                       //                         ),
+                       //                       ],
+                       //                     ),
+                       //                   ),
+                       //                 ),
+                       //               );
+                       //             },
+                       //             itemCount: 7,
+                       //           )
+                       //         /* Container(
+                       //         alignment: Alignment.center,
+                       //         decoration:  BoxDecoration(
+                       //           // image:  DecorationImage(
+                       //           //   image:  NetworkImage(bgList[index]),
+                       //           //   fit: BoxFit.cover,
+                       //           // ),
+                       //         ),
+                       //         child: Column(
+                       //           children: [
+                       //             Image.network(bgList[index],fit: BoxFit.cover,),
+                       //             Text(typesList[index]),
+                       //           ],
+                       //         ),
+                       //       ),*/
+                       //       ),
+                       //     ),
+                       //   ],
+                       // ),
+                     ],
+                   ),
+                 );
+               }else{
+                 return Center(child: CircularProgressIndicator(),);
+               }
               }
             );
           }else{

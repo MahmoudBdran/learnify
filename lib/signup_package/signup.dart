@@ -33,6 +33,15 @@ class _SignUpPageState extends State<SignUpPage> {
           'username':username,
           'uid':auth.currentUser!.uid,
           "email":email,
+          "level1_score":0,
+          "level2_score":0,
+          "level3_score":0,
+          "level4_score":0,
+          "level5_score":0,
+          "level6_score":0,
+          "level7_score":0,
+          "level8_score":0,
+          "points":0
         }).then((_) {
           print("signed up successfully");
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
@@ -290,8 +299,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     hidePassword = !hidePassword;
                   });
                 },
-                color: Theme.of(context)
-                    .accentColor
+                color:Colors.teal
                     .withOpacity(0.4),
                 icon: Icon(hidePassword
                     ? Icons.visibility_off
@@ -343,8 +351,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     hidePassword = !hidePassword;
                   });
                 },
-                color: Theme.of(context)
-                    .accentColor
+                color: Colors.teal
                     .withOpacity(0.4),
                 icon: Icon(hidePassword
                     ? Icons.visibility_off

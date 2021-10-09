@@ -49,8 +49,14 @@ class _Level2QuizState extends State<Level2Quiz> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]);FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      int res=value['points']+score;
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "points":res
+      });
+    });
     super.dispose();
+
   }
 
   late stt.SpeechToText _speech;
@@ -258,10 +264,9 @@ class _Level2QuizState extends State<Level2Quiz> {
                                         setState(() {
                                           if (result == "good") {
                                             score++;
-                                            FirebaseFirestore.instance
-                                                .collection("quiz")
-                                                .doc("level 2")
-                                                .update({"score": score});
+                                            FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                              "level2_score":score
+                                            });
                                           }
 
                                           if (ind + 1 < data.length) {
@@ -284,7 +289,7 @@ class _Level2QuizState extends State<Level2Quiz> {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: Text(res.toString() + "/" + dataLength.toString()),
+                  child: Text(score.toString())
                 );
               } else if (_text == the_word && finished == false) {
                 return Stack(

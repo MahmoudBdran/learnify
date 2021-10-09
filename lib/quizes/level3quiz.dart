@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +27,17 @@ class _Level3QuizState extends State<Level3Quiz> {
     ind = 0;
     ans = "";
     super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      int res=value['points']+score;
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "points":res
+      });
+    });
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -99,8 +111,8 @@ class _Level3QuizState extends State<Level3Quiz> {
                                 });
                               }else{
                                 setState(() {score++;
-                                FirebaseFirestore.instance.collection("quiz").doc("level 3").update(
-                                    {"score":score});
+                                FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                    {"level3_score":score});
                                   answering=true;
                                   ans="good";
                                   if (ind + 1 < data.length) {
@@ -141,8 +153,8 @@ class _Level3QuizState extends State<Level3Quiz> {
                                 });
                               }else{
                                 setState(() {score++;
-                                FirebaseFirestore.instance.collection("quiz").doc("level 3").update(
-                                    {"score":score});
+                                FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                    {"level3_score":score});
                                 answering=true;
                                 ans="good";
                                   answering=true;
@@ -185,8 +197,8 @@ class _Level3QuizState extends State<Level3Quiz> {
                                 });
                               }else{
                                 setState(() {score++;
-                                FirebaseFirestore.instance.collection("quiz").doc("level 3").update(
-                                    {"score":score});
+                                FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+                                    {"level3_score":score});
                                 answering=true;
                                 ans="good";
                                   if (ind + 1 < data.length) {
@@ -498,7 +510,7 @@ class _Level3QuizState extends State<Level3Quiz> {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: Text(res.toString()+"/2"),
+                  child: Text(score.toString())
                 );
               }
             }else{

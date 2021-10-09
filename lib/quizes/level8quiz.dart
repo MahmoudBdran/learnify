@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +39,12 @@ class _Level8QuizState extends State<Level8Quiz> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]);FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      int res=value['points']+score;
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "points":res
+      });
+    });
     super.dispose();
   }
   @override
@@ -125,8 +131,9 @@ class _Level8QuizState extends State<Level8Quiz> {
                                   if (choice1 == answer) {
                                     ans = "good";
                                     score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 8").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level8_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {
@@ -168,8 +175,9 @@ class _Level8QuizState extends State<Level8Quiz> {
                                 setState(() {
                                   if (choice2 == answer) {
                                     ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 8").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level8_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {
@@ -211,8 +219,9 @@ class _Level8QuizState extends State<Level8Quiz> {
                                 setState(() {
                                   if (choice3 == answer) {
                                     ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 8").update(
-                                        {"score":score});
+                                    FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                      "level8_score":score
+                                    });
                                     if (ind + 1 < data.length) {
                                       ind++;
                                     } else if (ind + 1 == data.length) {

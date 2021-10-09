@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,12 +32,20 @@ class _Level1QuizState extends State<Level1Quiz> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
+    ]);FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((value) {
+      int res=value['points']+score;
+      FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        "points":res
+      });
+    });
     super.dispose();
+
   }
   final FlutterTts tts = FlutterTts();
   final FlutterTts arabictts = FlutterTts();
-
+  int  score=0;
+  late int dataLength;
+  bool finished=false;
   _Level1QuizState(){
     tts.setLanguage('en');
     tts.setSpeechRate(0.4);
@@ -77,6 +88,22 @@ class _Level1QuizState extends State<Level1Quiz> {
         sub.cancel();
       });
     }
+    void startTimer2() {
+      CountdownTimer countDownTimer = new CountdownTimer(
+        new Duration(seconds: _start),
+        new Duration(seconds: 1),
+      );
+
+      var sub = countDownTimer.listen(null);
+      sub.onData((duration) {
+        setState(() { _current = _start - duration.elapsed.inSeconds; });
+      });
+
+      sub.onDone(() {
+
+        sub.cancel();
+      });
+    }
     // void _listen() async {
     //   if (!_isListening) {
     //     bool available = await _speech.initialize(
@@ -107,13 +134,14 @@ class _Level1QuizState extends State<Level1Quiz> {
       body:
       !answering?
       SafeArea(
-        child: Center(
+
+        child: finished==false?Center(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-              //  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+                //  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
                 SingleChildScrollView(
                   child: Column(
                     children: [
@@ -140,14 +168,22 @@ class _Level1QuizState extends State<Level1Quiz> {
                                   onTap: (){
                                     if(alphabet[index]==questionsList[question-1]){
                                       setState(() {
+
                                         startTimer();
                                         print("good");
                                         answer="right";
+                                        score++;
+                                        FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                          "level1_score":score
+                                        });
                                         answering=true;
                                         if(question<questionsList.length){
 
                                           question++;
                                         }else{
+                                          setState(() {
+                                            finished=true;
+                                          });
                                           print("finished");
                                         }
                                       });
@@ -192,6 +228,11 @@ class _Level1QuizState extends State<Level1Quiz> {
               ],
             ),
           ),
+        ):Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child:Text(score.toString())
         ),
       ):
       SafeArea(
