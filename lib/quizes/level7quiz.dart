@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ class _Level7QuizState extends State<Level7Quiz> {
     arabictts.setLanguage('ar');
     arabictts.setSpeechRate(0.4);
   }
+  bool answering=false;
   late int ind;
   late int dataLength;
   late String ans;
@@ -59,63 +61,64 @@ class _Level7QuizState extends State<Level7Quiz> {
   bool _isListening = false;
   String _text = '';
   double _confidence = 1.0;
+  int _start = 2;
+  int _current = 2;
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      setState(() {
+        _isListening=false;
+        _text='';
+
+      });
+      sub.cancel();
+    });
+  }
+  // void _listen() async {
+
+
+  //   if (!_isListening) {
+  //     bool available = await _speech.initialize(
+  //       onStatus: (val) => print('onStatus: $val'),
+  //       onError: (val) => print('onError: $val'),
+  //     );
+  //     if (available) {
+  //       setState(() => _isListening = true);
+  //       _speech.listen(
+  //         onResult: (val) => setState(() {
+  //           _text = val.recognizedWords;
+  //           if (val.hasConfidenceRating && val.confidence > 0) {
+  //             _confidence = val.confidence;
+  //           }
+  //
+  //           startTimer();
+  //
+  //
+  //         }),
+  //       );
+  //     }
+  //   } else {
+  //     setState(() {_isListening = false;
+  //     _speech.stop();
+  //     _text='';
+  //     });
+  //
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
-    int _start = 2;
-    int _current = 2;
-    void startTimer() {
-      CountdownTimer countDownTimer = new CountdownTimer(
-        new Duration(seconds: _start),
-        new Duration(seconds: 1),
-      );
-
-      var sub = countDownTimer.listen(null);
-      sub.onData((duration) {
-        setState(() {
-          _current = _start - duration.elapsed.inSeconds;
-        });
-      });
-
-      sub.onDone(() {
-        print("Done");
-        setState(() {
-          // answering=false;
-          //ans = "";
-          _text="";
-
-        });
-        sub.cancel();
-      });
-    }
-    void _listen() async {
-      if (!_isListening) {
-        bool available = await _speech.initialize(
-          onStatus: (val) => print('onStatus: $val'),
-          onError: (val) => print('onError: $val'),
-        );
-        if (available) {
-          setState(() => _isListening = true);
-          _speech.listen(
-            onResult: (val) => setState(() {
-              _text = val.recognizedWords;
-              if (val.hasConfidenceRating && val.confidence > 0) {
-                _confidence = val.confidence;
-              }
-
-              startTimer();
-
-
-            }),
-          );
-        }
-      } else {
-        setState(() {_isListening = false;
-        _speech.stop();
-        _text='';
-        });
-
-      }
-    }
     return Scaffold(
         body: FutureBuilder<DocumentSnapshot>(
           future:
@@ -123,7 +126,7 @@ class _Level7QuizState extends State<Level7Quiz> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List data = [];
-              int res=0;
+              var res;
               DocumentSnapshot<Object?>? doc = snapshot.data;
               data = doc!["words"];
               res=doc!['score'];
@@ -139,57 +142,115 @@ class _Level7QuizState extends State<Level7Quiz> {
                     alignment: Alignment.center,
                     child:
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                tts.speak(the_word);
-                              },
-                              child: Container(
-                                  alignment: Alignment.center,
-                                  height: 200,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.white,
+                           SizedBox(width: 10,),
+                            Expanded(flex: 9,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      tts.speak(the_word);
+                                    },
+                                    child: Container(
+                                        alignment: Alignment.center,
+                                        height: 200,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          color: Colors.white,
+                                        ),
+                                        child:Column(
+                                          children: [
+                                            Image.network(image,height: 170,width: 150,fit: BoxFit.cover,),
+                                          ],
+                                        )
+                                    ),
                                   ),
-                                  child:Column(
-                                    children: [
-                                      Image.network(image,height: 170,width: 150,fit: BoxFit.cover,),
-                                    ],
+                                  SizedBox(
+                                    width: 25,
+                                  ),
+                                  Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: (){
+                                                tts.speak(the_word);
+                                              },
+                                              child: Text(
+                                                the_word,
+                                                style: GoogleFonts.aBeeZee(
+                                                    color: Colors.black87,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 30),
+                                              ),
+                                            ),
+                                            FloatingActionButton(
+                                                onPressed: ()async {
+                                                  if (!_isListening) {
+                                                    bool available = await _speech.initialize(
+                                                      onStatus: (val) => print('onStatus: $val'),
+                                                      onError: (val) => print('onError: $val'),
+                                                    );
+                                                    if (available) {
+                                                      setState(() => _isListening = true);
+                                                      _speech.listen(
+                                                        onResult: (val) => setState(()  {
+                                                          _text = val.recognizedWords;
+                                                          if (val.hasConfidenceRating && val.confidence > 0) {
+                                                            _confidence = val.confidence;
+                                                          }
+
+                                                          startTimer();
+                                                            /*
+                                                            ocumentSnapshot<Object?>? doc = snapshot.data;
+              data = doc!["words"];
+              res=doc!['score'];
+                                                             */
+
+                                                        }),
+
+                                                      );
+                                                    }
+                                                  } else {
+                                                    setState(() {_isListening = false;
+                                                    _speech.stop();
+                                                    _text='';
+                                                    });
+
+                                                  }
+                                                },
+                                                child: Icon(_isListening ? Icons.mic : Icons.mic_none)),
+                                          ],
+                                        ),
+                                        Text(_text),
+                                      ],),
                                   )
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 25,
-                            ),
-                            Container(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: (){
-                                          tts.speak(the_word);
-                                        },
-                                        child: Text(
-                                          the_word,
-                                          style: GoogleFonts.aBeeZee(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 30),
-                                        ),
-                                      ),
-                                      FloatingActionButton(
-                                          onPressed: _listen,
-                                          child: Icon(_isListening ? Icons.mic : Icons.mic_none)),
-                                    ],
-                                  ),
-                                  Text(_text),
-                                ],),
-                            )
+                            IconButton(onPressed: (){ if(_text!=""){
+                              setState(() {
+                                if(_text==the_word){
+                                  score++;
+                                  FirebaseFirestore.instance.collection("quiz").doc("level 2").update({
+                                    "score":score
+                                  });
+                                }
+                                _text="";
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                              });
+                            }
+                            }, icon: Icon(Icons.arrow_forward_ios)),
                           ],
                         ),
 
@@ -198,6 +259,7 @@ class _Level7QuizState extends State<Level7Quiz> {
                 );
               }
               else if (_text==the_word&&finished==false) {
+
                 return SingleChildScrollView(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
@@ -276,7 +338,7 @@ class _Level7QuizState extends State<Level7Quiz> {
                                           ),
                                         ),
                                         FloatingActionButton(
-                                            onPressed: _listen,
+                                            onPressed: (){},
                                             child: Icon(_isListening ? Icons.mic : Icons.mic_none)),
                                       ],
                                     ),
@@ -307,7 +369,8 @@ class _Level7QuizState extends State<Level7Quiz> {
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: Text(res.toString()+"/2"),
+                  child: Text(res.toString()+"/"+dataLength.toString())
+
                 );
               }
               else {
@@ -389,7 +452,7 @@ class _Level7QuizState extends State<Level7Quiz> {
                                           ),
                                         ),
                                         FloatingActionButton(
-                                            onPressed: _listen,
+                                            onPressed: (){},
                                             child: Icon(_isListening ? Icons.mic : Icons.mic_none)),
                                       ],
                                     ),

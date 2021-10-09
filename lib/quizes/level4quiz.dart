@@ -93,21 +93,165 @@ class _Level4QuizState extends State<Level4Quiz> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 alignment: Alignment.center,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (ind >0) {
-                              ind++;
-                            } else if (ind  == 0) {
-                              finished = true;
-                            }
-                          });
-                        },
-                        icon: Icon(Icons.arrow_back_ios)),
+                    Text(
+                      arWord,
+                      style: GoogleFonts.aBeeZee(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (choice1 == answer) {
+                                ans = "good";
+                                score++;
+                                FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
+                                    {"score":score});
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              } else {
+                                ans = "bad";
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              }
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.grey[200],
+                            ),
+                            child: Text(
+                              choice1,
+                              style: GoogleFonts.aBeeZee(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (choice2 == answer) {
+                                ans = "good";score++;
+                                FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
+                                    {"score":score});
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              } else {
+                                ans = "bad";
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              }
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.grey[200],
+                            ),
+                            child: Text(
+                              choice2,
+                              style: GoogleFonts.aBeeZee(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (choice3 == answer) {
+                                ans = "good";score++;
+                                FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
+                                    {"score":score});
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              } else {
+                                ans = "bad";
+                                if (ind + 1 < data.length) {
+                                  ind++;
+                                } else if (ind + 1 == data.length) {
+                                  finished = true;
+                                }
+                                startTimer();
+                              }
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.grey[200],
+                            ),
+                            child: Text(
+                              choice3,
+                              style: GoogleFonts.aBeeZee(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
+          else if (ans == "good"&&finished==false) {
+            return SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -124,241 +268,59 @@ class _Level4QuizState extends State<Level4Quiz> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (choice1 == answer) {
-                                    ans = "good";
-                                    score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
-                                        {"score":score});
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  } else {
-                                    ans = "bad";
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  }
-                                });
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Text(
-                                  choice1,
-                                  style: GoogleFonts.aBeeZee(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice1,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
                               width: 25,
                             ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (choice2 == answer) {
-                                    ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
-                                        {"score":score});
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  } else {
-                                    ans = "bad";
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  }
-                                });
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Text(
-                                  choice2,
-                                  style: GoogleFonts.aBeeZee(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice2,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
                               width: 25,
                             ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (choice3 == answer) {
-                                    ans = "good";score++;
-                                    FirebaseFirestore.instance.collection("quiz").doc("level 4").update(
-                                        {"score":score});
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  } else {
-                                    ans = "bad";
-                                    if (ind + 1 < data.length) {
-                                      ind++;
-                                    } else if (ind + 1 == data.length) {
-                                      finished = true;
-                                    }
-                                    startTimer();
-                                  }
-                                });
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Text(
-                                  choice3,
-                                  style: GoogleFonts.aBeeZee(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice3,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
                               ),
                             )
                           ],
                         )
-                      ],
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            if (ind + 1 < data.length) {
-                              ind++;
-                            } else if (ind + 1 == data.length) {
-                              finished = true;
-                            }
-                          });
-                        },
-                        icon: Icon(Icons.arrow_forward_ios)),
-                  ],
-                ),
-              ),
-            );
-          }
-          else if (ans == "good"&&finished==false) {
-            return SingleChildScrollView(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              arWord,
-                              style: GoogleFonts.aBeeZee(
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice1,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice2,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice3,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_forward_ios)),
                       ],
                     ),
                     Container(
@@ -380,7 +342,7 @@ class _Level4QuizState extends State<Level4Quiz> {
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Text(res.toString()+"/3"),
+              child: Text(res.toString()+"/"+dataLength.toString()),
             );
           }
           else {
@@ -391,86 +353,75 @@ class _Level4QuizState extends State<Level4Quiz> {
                 alignment: Alignment.center,
                 child: Stack(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                            onPressed: () {}, icon: Icon(Icons.arrow_back_ios)),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Text(
+                          arWord,
+                          style: GoogleFonts.aBeeZee(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(
-                              arWord,
-                              style: GoogleFonts.aBeeZee(
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice1,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                             SizedBox(
-                              height: 30,
+                              width: 25,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice1,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice2,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 50,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Text(
-                                    choice3,
-                                    style: GoogleFonts.aBeeZee(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )
-                              ],
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice2,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 25,
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.grey[200],
+                              ),
+                              child: Text(
+                                choice3,
+                                style: GoogleFonts.aBeeZee(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             )
                           ],
-                        ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.arrow_forward_ios)),
+                        )
                       ],
                     ),
                     Container(

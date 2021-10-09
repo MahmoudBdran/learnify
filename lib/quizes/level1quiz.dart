@@ -43,9 +43,10 @@ class _Level1QuizState extends State<Level1Quiz> {
   }
   int question=1;
   List<String>questionsList=['a','b','c','d','e','f','g'];
-  List<String>alphabet=['a','b','c','d','e','f','g','h',
-    'i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-    'w','x','y','z'];
+  // List<String>alphabet=['a','b','c','d','e','f','g','h',
+  //   'i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+  //   'w','x','y','z'];
+  List<String> alphabet=['h','v','g','u','f','t','e','s','d','r','c','q','b','p','a','o','n','z','m','y','l','x','k','i','j','w'];
   bool answering=false;
   String answer="right";
   // late stt.SpeechToText _speech;
